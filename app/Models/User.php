@@ -17,9 +17,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'name','photo','about','email','password','current_team_id'
     ];
 
     /**
@@ -44,4 +42,46 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function tasks()
+    {
+        return $this->belongsToMany(Task::class);
+    }
+
+    public function teams()
+    {
+        return $this->belongsToMany(Team::class)->withPivot('role_id')->withTimestamps();
+    }
+
+    public function roleInTeam($teamId)
+    {
+        return $this->teams()->where('team_id', $teamId)->first()->pivot->role_id;
+    }
+
+    public function ownedTeams()
+    {
+        return $this->hasMany(Team::class, 'owner_id');
+    }
+
+    public function invitations()
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
+    public function currentTeam()
+    {
+        return $this->belongsTo(Team::class, 'current_team_id','id');
+    }
+
+    public function isAdmin(Team $team)
+    {
+        $roleId = $this->roleInTeam($team->id);
+        return $roleId === Role::where('name', 'admin')->first()->id;
+    }
+
 }
