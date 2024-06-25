@@ -35,12 +35,12 @@ export default function AddNewMember({
 
     const [email, setEmail] = useState("");
     const [suggestions, setSuggestions] = useState<string[]>([]);
-    const {toast} = useToast();
+    const { toast } = useToast();
 
     const sendInvitation: FormEventHandler = async (e: FormEvent) => {
         e.preventDefault();
 
-        post(route("team-invitation.sendInvitation", team.id), {
+        post(route("team-invitation.send", team.id), {
             preserveState: true,
             preserveScroll: true,
             onSuccess: () => {
@@ -58,7 +58,7 @@ export default function AddNewMember({
             const fetchSuggestions = async () => {
                 try {
                     const response = await axios.get(
-                        route("team-invitation.suggestions"),
+                        route("team-invitation.suggestions", team.id),
                         {
                             params: { email },
                         }
@@ -76,11 +76,8 @@ export default function AddNewMember({
 
     return (
         <Card>
-            <CardHeader>
+            <CardHeader className="mb-6">
                 <CardTitle>Add New Member</CardTitle>
-                <CardDescription>
-                    Invite new members to your team
-                </CardDescription>
             </CardHeader>
             <CardContent>
                 <form onSubmit={sendInvitation}>
@@ -130,6 +127,7 @@ export default function AddNewMember({
                     <InputError className="mt-2" message={errors.email} />
                     <InputError message={errors.role} />
                 </form>
+                
             </CardContent>
         </Card>
     );

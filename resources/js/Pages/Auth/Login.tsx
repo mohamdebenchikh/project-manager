@@ -7,7 +7,6 @@ import { Button } from "@/Components/ui/button";
 import { Input } from "@/Components/ui/input";
 import { Head, Link, useForm } from "@inertiajs/react";
 
-
 export default function Login({
     status,
     canResetPassword,
@@ -36,12 +35,6 @@ export default function Login({
     return (
         <GuestLayout>
             <Head title="Log in" />
-
-            <div className="text-center mb-3">
-                <h2 className="text-2xl text-primary font-bold">Login</h2>
-             
-            </div>
-
             <div>
                 {status && (
                     <div className="mb-4 font-medium text-sm text-green-600">
@@ -66,8 +59,20 @@ export default function Login({
                         <InputError message={errors.email} className="mt-2" />
                     </div>
 
-                    <div className="mt-4">
-                        <Label htmlFor="password">Password</Label>
+                    <div className="mt-6">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="password">Password</Label>
+                            
+                        {canResetPassword && (
+                            <Link
+                                href={route("password.request")}
+                                className="underline text-sm text-muted-foreground hover:text-primary"
+                            >
+                                Forgot your password?
+                            </Link>
+                        )}
+                
+                        </div>
 
                         <Input
                             id="password"
@@ -108,14 +113,14 @@ export default function Login({
                             />
                             <span className="ms-2">Remember me</span>
                         </Label>
-                        {canResetPassword && (
+                       
                             <Link
-                                href={route("password.request")}
+                                href={route("register")}
                                 className="underline text-sm text-muted-foreground hover:text-primary"
                             >
-                                Forgot your password?
+                                Don't have an account?
                             </Link>
-                        )}
+                    
                     </div>
                 </form>
             </div>

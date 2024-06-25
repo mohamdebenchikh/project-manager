@@ -18,6 +18,10 @@ export interface Invitation {
     role_id: number;
     email: string;
     token: string;
+    created_at: string;
+    updated_at: string;
+    user:User;
+    role:Role;
 }
 
 export interface Role {
@@ -106,6 +110,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
     teams: Team[];
     team:Team;
     roles: Role[];
+    invitations: Invitation[];
     notifications: Notification[];
     flash: {
         success?: string;

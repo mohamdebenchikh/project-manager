@@ -29,11 +29,6 @@ export default function Register() {
     return (
         <GuestLayout>
             <Head title="Register" />
-
-            <div className="text-center mb-4">
-                <h2 className="text-2xl text-primary font-bold">Register</h2>
-            </div>
-
             <div>
                 {status && (
                     <div className="mb-4 font-medium text-sm text-green-600">

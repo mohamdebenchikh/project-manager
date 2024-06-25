@@ -9,6 +9,7 @@ use App\Http\Controllers\TaskAssignmentController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\TeamInvitationController;
+use App\Http\Controllers\TeamMemberController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -71,10 +72,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/teams/{team}/change', [TeamController::class, 'change'])->name('teams.change');
 
     // Team invitation
-    Route::get('/team-inivitation/suggestions/users', [TeamInvitationController::class, 'suggestUsers'])->name('team-invitation.suggestions');
-    Route::post('/team-inivitation/{team}/send', [TeamInvitationController::class, 'sendInvitation'])->name('team-invitation.sendInvitation');
-    Route::post('team-invitation/{token}/accept', [TeamInvitationController::class, 'acceptInvitation'])->name('team-invitation.accept');
-    Route::post('/team-invitation/{token}/cancel', [TeamInvitationController::class, 'cancelInvitation'])->name('team-invitation.cancel');
+    Route::get('/team-inivitation/{team}/suggestions/users', [TeamInvitationController::class, 'suggestUsers'])->name('team-invitation.suggestions');
+    Route::post('/team-inivitation/{team}/send', [TeamInvitationController::class, 'send'])->name('team-invitation.send');
+    Route::post('team-invitation/{token}/accept', [TeamInvitationController::class, 'accept'])->name('team-invitation.accept');
+    Route::post('/team-invitation/{token}/decline', [TeamInvitationController::class, 'decline'])->name('team-invitation.decline');
+    Route::post('/team-invitation/{token}/cancel', [TeamInvitationController::class, 'cancel'])->name('team-invitation.cancel');
 
     // Notifications
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
@@ -82,6 +84,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/notifications/{id}/unread', [NotificationController::class, 'markAsUnread'])->name('notifications.markAsUnread');
     Route::delete('/notifications/{id}/delete', [NotificationController::class, 'delete'])->name('notifications.delete');
     Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+
+    // team member
+    Route::post('/teams/{team}/members/{user}', [TeamMemberController::class, 'update'])->name('team-members.update');
+    Route::delete('/teams/{team}/members/{user}', [TeamMemberController::class, 'destroy'])->name('team-members.destroy');
+
 });
 
 // Auth routes

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invitation;
 use App\Models\Team;
 use App\Models\User;
 use App\Models\Role;
@@ -12,16 +13,6 @@ use Inertia\Inertia;
 
 class TeamController extends Controller
 {
-    public function index()
-    {
-        $teams = Auth::user()->teams;
-        return Inertia::render('Teams/Index', ['teams' => $teams]);
-    }
-
-    public function create()
-    {
-        return Inertia::render('Teams/Create');
-    }
 
     public function store(Request $request)
     {
@@ -36,12 +27,6 @@ class TeamController extends Controller
         $adminRole = Role::where('name', 'admin')->first();
         $team->members()->attach($user_id, ['role_id' => $adminRole->id]);
         return redirect()->route('teams.edit', $team->id)->with('success', 'Team created successfully.');
-    }
-
-    public function show(Team $team)
-    {
-        Gate::authorize('view', $team);
-        return Inertia::render('Teams/Show', ['team' => $team]);
     }
 
     public function edit(Team $team)
@@ -65,7 +50,9 @@ class TeamController extends Controller
             }
         }
         
-        return Inertia::render('Teams/Edit', ['team' => $team, 'roles' => $roles]);
+        $invitations = Invitation::with('user', 'role')->where('team_id', $team->id)->get();
+        
+        return Inertia::render('Teams/Edit', ['team' => $team, 'roles' => $roles, 'invitations' => $invitations]);
     }
 
     public function update(Request $request, Team $team)

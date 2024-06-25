@@ -46,7 +46,7 @@ class RegisteredUserController extends Controller
 
         $teamName = explode(' ', $user->name)[0] . "'s Team";
         $team = Team::create(['name' => $teamName, 'owner_id' => $user->id]);
-        $role = Role::where('name', 'admin')->first();
+        $role = Role::where('name', 'admin')->firstOrCreate(['name' => 'admin']);
         $team->members()->attach($user, ['role_id' => $role->id]);
         $user->current_team_id = $team->id;
         $user->save();

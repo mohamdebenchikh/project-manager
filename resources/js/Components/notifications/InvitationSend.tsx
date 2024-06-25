@@ -1,15 +1,11 @@
 import { router } from "@inertiajs/react";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { Notification } from "@/types";
 import { generateAvatarFromUsername } from "@/lib/utils";
 import { Button } from "@/Components/ui/button";
 
-const TeamNotificationTemplate = ({
-    notification,
-}: {
-    notification: Notification;
-}) => {
+const InvitationSend = ({ notification }: { notification: Notification }) => {
     const data = notification.data;
 
     const handleAccept = () => {
@@ -19,7 +15,7 @@ const TeamNotificationTemplate = ({
     };
 
     const handleDecline = () => {
-        router.post(route("team-invitation.cancel", data?.invitation_token), {
+        router.post(route("team-invitation.decline", data?.invitation_token), {
             notification_id: notification.id,
         });
     };
@@ -71,4 +67,4 @@ const TeamNotificationTemplate = ({
     );
 };
 
-export default TeamNotificationTemplate;
+export default InvitationSend;

@@ -17,6 +17,8 @@ import { Button } from "@/Components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { generateAvatarFromUsername } from "@/lib/utils";
 import AddNewMember from "./AddNewMember";
+import TeamMembers from "./TeamMembers";
+import PendingInvitations from "./Invitations";
 
 export default function Edit({ auth, team, roles }: PageProps) {
     const { data, setData, put, processing, errors } = useForm({
@@ -107,6 +109,14 @@ export default function Edit({ auth, team, roles }: PageProps) {
                     </Card>
 
                     <AddNewMember team={team} roles={roles} />
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Pending Invitations</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <PendingInvitations />
+                        </CardContent>
+                    </Card>
                 </div>
                 <div className="col-span-1 md:col-span-2 space-y-6">
                     <Card>
@@ -140,12 +150,9 @@ export default function Edit({ auth, team, roles }: PageProps) {
                         </CardHeader>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Team Members</CardTitle>
-                        </CardHeader>
-                        <CardContent></CardContent>
-                    </Card>
+                    {team.members.length > 0 && (
+                        <TeamMembers team={team} members={team.members} />
+                    )}
                 </div>
             </div>
         </AuthenticatedLayout>
